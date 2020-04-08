@@ -1,0 +1,29 @@
+{
+  "users": [
+    {
+      "email": "joao@joao.com",
+      "name": "João",
+      "password": "13j12o3hjo1i2h3"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "owner": { "email": "joaovic.rocha3@gmail.com", "name": "João"},
+      "content": "um post de exemplo - hello",
+      "publish_date": "07-04-2020"
+    },
+    {
+      "id": 2,
+      "owner": { "email": "joao@joao.com", "name": "João"},
+      "content": "um post de exemplo2 - let me prove otherwise um post de exemplo2 - let me prove otherwise um post de exemplo2 - let me prove otherwise um post de exemplo2 - let me prove otherwise um post de exemplo2 - let me prove otherwise",
+      "publish_date": "07-04-2020"
+    },
+    {
+      "id": 3,
+      "owner": { "email": "matheus@gmail.com", "name": "Matheus"},
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend, tortor vitae malesuada dictum, risus tortor molestie purus, vel convallis elit nisl nec risus. Phasellus ",
+      "publish_date": "07-04-2020"
+    }
+  ]
+}
