@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { View, 
-    Text, 
     StyleSheet,
-    TextInput,
     TouchableOpacity,
-    FlatList, 
-    Alert} from 'react-native'
-
+    FlatList,
+    SafeAreaView,
+    Platform
+} from 'react-native'
+import { KeyboardAwareFlatList, KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AsyncStorage from '@react-native-community/async-storage'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Pattern from '../styles/Pattern'
@@ -75,34 +75,39 @@ export default function Feed({ navigation }) {
     }, [posts])
 
     return (
-        <View style={styles.container}>
-            <Header email={user.email} />
-            <FlatList
-                data={[...posts]}
-                renderItem={({ item }) => (
-                <Card
-                    id={item.id}
-                    ownerName={item.owner.name}
-                    ownerEmail={item.owner.email}
-                    publishDate={item.publish_date}
-                    content={item.content}
-                    actualUser={user.email}
-                    onDeletePost={deletePost}
-                    onContentChange={contentChange}
+            <>
+            {/* Ciente deste Warning -> VirtualizedLists should never be nested inside plain ScrollViews with the same orientation */}
+            {/* Porem, esta foi a aproximacao que pude fazer para corrigir o KeyboarAvoidingView - Teclado não exibindo quando voce tenta editar o ultimo item da lista quando a lista ultrapassa ou chega proximo ao 100% da 'ViewPort' */}
+            <KeyboardAwareScrollView  style={styles.container}>
+                {/* <Header email={user.email} /> */}
+                <FlatList
+                    data={[...posts].reverse()}
+                    renderItem={({ item }) => (
+                    <Card
+                        id={item.id}
+                        ownerName={item.owner.name}
+                        ownerEmail={item.owner.email}
+                        publishDate={item.publish_date}
+                        content={item.content}
+                        actualUser={user.email}
+                        onDeletePost={deletePost}
+                        onContentChange={contentChange}
+                    />
+                    )}
+                    keyExtractor={item => `${item.id}`}
                 />
-                )}
-                keyExtractor={item => item.id}
-            />
+
+            </KeyboardAwareScrollView >
             <TouchableOpacity style={styles.addPost} onPress={() => navigation.navigate('AddPost')}>
                 <Icon name={'plus'} size={24} color='#fff' />
             </TouchableOpacity>
-        </View>
+            </>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     text: {
         fontSize: 24
