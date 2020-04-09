@@ -32,10 +32,10 @@ class Login extends Component {
   signin = () => {
     const res = JSON.stringify(this.state)
     AsyncStorage.setItem('userData', res)
-    this.props.navigation.navigate('Feed')
+    this.props.navigation.navigate('App')
   }
   signup = () => {
-    this.props.navigation.navigate('Feed')
+    this.props.navigation.navigate('App')
   }
   render() {
     return (

@@ -14,31 +14,10 @@ import Header from '../components/Header'
 import Mock from '../../mock.json'
 import Card from '../components/Card'
 
-export default function Feed() {
+export default function Feed({ navigation }) {
    
     const [user, setUser] = useState({email: '', nome: ''})
-    const [posts, setPosts] = useState([
-        {
-          "id": 1,
-          "owner": { "email": "joao@joao.com", "name": "João"},
-          "content": "um post de exemplo - hello",
-          "publish_date": "07-04-2020"
-        },
-        {
-          "id": 2,
-          "owner": { "email": "joao@joao.com", "name": "João"},
-          "content": "um post de exemplo2 - let me prove otherwise",
-          "publish_date": "07-04-2020"
-        },
-        {
-          "id": 3,
-          "owner": { "email": "matheus@gmail.com", "name": "Matheus"},
-          "content": "um post de exemplo3 - lorem ipsum dolum emet",
-          "publish_date": "07-04-2020"
-        }
-      ])
-    
-    const [editableMode, setEditableMode] = useState(false)
+    const [posts, setPosts] = useState([])
 
     const retrieveUser = async () => {
         try {
@@ -51,15 +30,43 @@ export default function Feed() {
         return
     }
 
-    const getPosts = () => {
-        
-        const newData = Mock.posts
-        setPosts([...newData])
+    const retrievePosts = async () => {
+        try {
+            const res = await AsyncStorage.getItem('posts')
+            const value = JSON.parse(res)
+            setPosts([...value])
+        } catch(err) {
+            console.log(err)
+        }
+        return
     }
 
-    const onEditPost = () => {
-        Alert.alert("Alert!", "Editing the text")
-        setEditableMode(!editableMode)
+    const getPosts = () => {
+        if(!posts[0]) {
+            const newData = Mock.posts
+            setPosts([...newData])
+            console.log(posts)
+            savePosts(newData)
+        }
+        retrievePosts()
+    }
+
+    const savePosts = newPosts => {
+        const savePosts = AsyncStorage.setItem('posts', JSON.stringify(newPosts))
+    }
+
+    const deletePost = id => {
+        const postsCopy = posts.filter(post => post.id !== id)
+        setPosts(postsCopy)
+    }
+
+    const contentChange = (id, value) => {
+        const index = posts.findIndex(post => post.id === id)
+        posts[index].content = value
+        setPosts([...posts])
+    }
+    const savePostContent = () => {
+        console.log('alo')
     }
 
     useEffect(() => {
@@ -67,35 +74,40 @@ export default function Feed() {
     }, [])
 
     useEffect(() => {
-        getPosts()
-    }, [])
-    // render() {
-         
-        return (
-            <View style={styles.container}>
-                <Header email={user.email} />
-                <FlatList
-                    data={[...posts]}
-                    renderItem={({ item }) => (
-                    <Card
-                        id={item.id}
-                        ownerName={item.owner.name}
-                        ownerEmail={item.owner.email}
-                        publishDate={item.publish_date}
-                        content={item.content}
-                        actualUser={user.email}
-                        onEdit={onEditPost}
-                        editableMode={editableMode}
-                    />
-                    )}
-                    keyExtractor={item => item.id}
+        setTimeout(() => {
+            retrievePosts()
+        }, 500)
+    }, [posts])
+
+    useEffect(() => {
+        savePosts(posts)
+    }, [posts])
+
+    return (
+        <View style={styles.container}>
+            <Header email={user.email} />
+            <FlatList
+                data={[...posts]}
+                renderItem={({ item }) => (
+                <Card
+                    id={item.id}
+                    ownerName={item.owner.name}
+                    ownerEmail={item.owner.email}
+                    publishDate={item.publish_date}
+                    content={item.content}
+                    actualUser={user.email}
+                    onDeletePost={deletePost}
+                    onContentChange={contentChange}
+                    onSaveContent={savePostContent}
                 />
-                <TouchableOpacity style={styles.addPost}>
-                    <Icon name={'plus'} size={24} color='#fff' />
-                </TouchableOpacity>
-            </View>
-        )
-    // }
+                )}
+                keyExtractor={item => item.id}
+            />
+            <TouchableOpacity style={styles.addPost} onPress={() => navigation.navigate('AddPost')}>
+                <Icon name={'plus'} size={24} color='#fff' />
+            </TouchableOpacity>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({

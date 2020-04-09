@@ -1,8 +1,5 @@
-import React from 'react'
-
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import Icon from 'react-native-vector-icons/FontAwesome'
+import { createStackNavigator } from 'react-navigation-stack'
 
 import Login from './screens/Login'
 import Splash from './screens/Splash'
@@ -16,6 +13,12 @@ import AddPost from './screens/AddPost'
 //   initialRouteName: 'Splash'
 // })
 
+const App = createStackNavigator({
+  Feed,
+  AddPost,
+}, {
+  initialRouteName: 'Feed'
+});
 
 const mainRoutes = {
   Splash: {
@@ -26,13 +29,9 @@ const mainRoutes = {
     name: 'Login',
     screen: Login
   },
-  Feed: {
-    name: 'Feed',
-    screen: Feed
-  },
-  AddPost: {
-    name: 'AddPost',
-    screen: AddPost
+  App: {
+    name: 'App',
+    screen: App
   }
 }
 
