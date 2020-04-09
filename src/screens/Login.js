@@ -12,30 +12,106 @@ import { View,
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Pattern from '../styles/Pattern'
 import AsyncStorage from '@react-native-community/async-storage'
+import Mock from '../../mock.json'
 
 class Login extends Component {
 
   state = {
     email: '',
     password: '',
-    nome: '',
+    name: '',
     subscribe: false
   }
 
   signinOrSignup = () => {
-      if(this.state.subscribe) {
+      if(this.state.email === '' || this.state.password === '') {
+        Alert.alert("Campos em branco", "Por favor preencher todos os campos")
+      }
+      else if(this.state.subscribe) {
         this.signup()
       } else {
         this.signin()
       }
   }
-  signin = () => {
+  signin = async () => {
     const res = JSON.stringify(this.state)
-    AsyncStorage.setItem('userData', res)
-    this.props.navigation.navigate('App')
+    const emailMatch = await this.verifyLogin(this.state.email, this.state.password)
+    if(emailMatch.length) {
+      try {
+        AsyncStorage.setItem('userData', JSON.stringify(emailMatch[0]))
+        this.props.navigation.navigate('App') 
+      } catch (error) {
+        Alert.alert("Alerta", "E-mail ou senha incorreta")
+      }
+    } else {
+      Alert.alert("Alerta", "E-mail ou senha incorreta")
+    }
+  }
+
+  verifyLogin = async (email, password) => {
+  
+    let allUsers = await this.retrieveUser()
+
+    try {
+      const emailMatch = allUsers.filter(user => user.email === email && user.password === password)
+      return emailMatch
+    } catch (error) {
+      console.log(error)
+    }
+    return
+  }
+  
+  retrieveUser = async () => {
+    try {
+        const res = await AsyncStorage.getItem('users')
+        const value = JSON.parse(res)
+        // console.log("All users =>", value)
+        return value
+    } catch(err) {
+        console.log(err)
+    }
+    return
+  }
+
+  subscribeUser = async () => {
+    let allUsers = await this.retrieveUser()
+    
+    let verifyUser = allUsers.filter(user => user.email === this.state.email)
+    if(verifyUser.length > 0) {
+      Alert.alert("Erro!", "Usuário já possui cadastro!")
+      this.setState(this.state)
+    } else {
+      allUsers.push(this.state)
+      const saveUsers = AsyncStorage.setItem('users', JSON.stringify(allUsers))
+      this.props.navigation.navigate('Login')
+    }
   }
   signup = () => {
-    this.props.navigation.navigate('App')
+    this.subscribeUser()
+  }
+  retrievePosts = async () => {
+    try {
+        const res = await AsyncStorage.getItem('posts')
+        const value = JSON.parse(res)
+        return value
+    } catch(err) {
+        console.log(err)
+    }
+    return
+}
+  getPosts = async () => {
+    const posts = await this.retrievePosts()
+    if(posts.length === 0)  {
+      const newPosts = Mock.posts
+      const savePosts = AsyncStorage.setItem('posts', JSON.stringify(newPosts))
+    }
+    return
+  }
+  componentDidMount() {
+    this.getPosts()
+  }
+  componentDidUpdate() {
+    this.retrieveUser()
   }
   render() {
     return (
@@ -46,8 +122,8 @@ class Login extends Component {
           </View>
 
           {this.state.subscribe ? <View style={styles.SectionStyle}>
-              <Icon name='at' color='#000' size={20} style={styles.IconUser} />
-              <TextInput style={styles.input} placeholder="Nome" placeholderTextColor='#000' value={this.state.email} onChangeText={nome => this.setState({ nome })} />
+              <Icon name='user' color='#000' size={20} style={styles.IconUser} />
+              <TextInput style={styles.input} placeholder="Nome" placeholderTextColor='#000' value={this.state.name} onChangeText={name => this.setState({ name })} autoFocus={true} />
           </View> : null}
           <View style={styles.SectionStyle}>
               <Icon name='at' color='#000' size={20} style={styles.IconUser} />
@@ -64,7 +140,7 @@ class Login extends Component {
               </Text>
           </TouchableOpacity>
 
-          <TouchableHighlight style={{ marginTop: 10 }} onPress={() => this.setState({ subscribe: !this.state.subscribe })}>
+          <TouchableHighlight style={{ marginTop: 10 }} onPress={() => this.setState({ subscribe: !this.state.subscribe, email: '', password: '', name: ''  })}>
               <Text style={styles.hint}>
                   {this.state.subscribe ? 'Já possui conta?' : 'Não possui cadastro?'} 
               </Text>
