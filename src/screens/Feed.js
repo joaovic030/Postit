@@ -52,10 +52,8 @@ export default function Feed({ navigation }) {
     const contentChange = (id, value) => {
         const index = posts.findIndex(post => post.id === id)
         posts[index].content = value
-        setPosts([...posts])
-    }
-    const savePostContent = () => {
-        console.log('alo')
+        const copyPosts = posts
+        setPosts([...copyPosts])
     }
 
     useEffect(() => {
@@ -91,7 +89,6 @@ export default function Feed({ navigation }) {
                     actualUser={user.email}
                     onDeletePost={deletePost}
                     onContentChange={contentChange}
-                    onSaveContent={savePostContent}
                 />
                 )}
                 keyExtractor={item => item.id}
