@@ -9,21 +9,21 @@
   "posts": [
     {
       "id": 1,
-      "owner": { "email": "joaovic.rocha3@gmail.com", "name": "João"},
+      "owner": { "email": "pascal@live.com", "name": "Pascal"},
       "content": "um post de exemplo - hello",
-      "publish_date": "07-04-2020"
+      "publish_date": "07/04/2020"
     },
     {
       "id": 2,
-      "owner": { "email": "joao@joao.com", "name": "João"},
+      "owner": { "email": "cleyton@goncalves.com", "name": "Cleyton"},
       "content": "um post de exemplo2 - let me prove otherwise um post de exemplo2 - let me prove otherwise um post de exemplo2 - let me prove otherwise um post de exemplo2 - let me prove otherwise um post de exemplo2 - let me prove otherwise",
-      "publish_date": "07-04-2020"
+      "publish_date": "07/04/2020"
     },
     {
       "id": 3,
       "owner": { "email": "matheus@gmail.com", "name": "Matheus"},
-      "content": "batata",
-      "publish_date": "07-04-2020"
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur lacinia in tellus eu vestibulum. Etiam eget magna ac neque ornare lobortis. Sed eu tristique quam. Vivamus et imperdiet nisl. Morbi nec velit dolor. Cras in dignissim nunc. Morbi sed iaculis dolor, eu elementum lacus. ",
+      "publish_date": "07/04/2020"
     }
   ]
 }

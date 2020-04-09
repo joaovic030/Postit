@@ -4,7 +4,8 @@ import { View,
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    TouchableWithoutFeedback } from 'react-native'
+    TouchableWithoutFeedback, 
+    Alert} from 'react-native'
 
 import AsyncStorage from '@react-native-community/async-storage'
 import Pattern from '../styles/Pattern'
@@ -21,7 +22,7 @@ export default function AddPost({ navigation }) {
     try {
         const res = await AsyncStorage.getItem('userData')
         const value = JSON.parse(res)
-        setUser({...value})
+        setUser(value)
     } catch(err) {
         console.log(err)
     }
@@ -40,7 +41,6 @@ export default function AddPost({ navigation }) {
 
   const addPost = () => {
     const newPosts = posts
-    console.log("Todos os posts:", newPosts)
     const post = {
       id: Math.random(),
       "owner": user,
@@ -52,7 +52,7 @@ export default function AddPost({ navigation }) {
       const savePosts = AsyncStorage.setItem('posts', JSON.stringify(newPosts))
       setTimeout(() => {navigation.navigate('Feed')}, 1000)
     } catch (err) {
-      console.log(err)
+      Alert.alert("Alerta", "Não foi possivel adicionar um post")
     }
     
   }
@@ -68,8 +68,10 @@ export default function AddPost({ navigation }) {
     <View style={styles.container}>
       <TextInput onChangeText={value => {
         setContentText(value)
-      }} style={{ borderRadius: 3, borderWidth: 0.5 }} maxLength={280} />
-      <Text> {contentText.length}/280 </Text>
+      }} style={styles.input} maxLength={280} multiline={true} placeholder='O que deseja postar?' />
+      <View style={styles.contador}>
+        <Text> {contentText.length}/280 </Text>
+      </View>
 
       <TouchableOpacity style={styles.addPost} onPress={() => addPost() }>
         <Icon name={'check'} size={24} color='#fff' />
@@ -80,7 +82,18 @@ export default function AddPost({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignItems: 'center'
+  },
+  input: {
+    borderBottomColor: '#ccc', 
+    borderBottomWidth: 1, 
+    width: '90%'
+  },
+  contador: { 
+    flexDirection: 'row',
+    width: '90%',
+    justifyContent: 'flex-end',
   },
   addPost: {
     width: 60,

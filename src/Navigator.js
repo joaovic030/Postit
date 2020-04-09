@@ -14,8 +14,19 @@ import AddPost from './screens/AddPost'
 // })
 
 const App = createStackNavigator({
-  Feed,
-  AddPost,
+  Feed: {
+    screen: Feed,
+    navigationOptions: {
+      title: 'Post.its'
+    }
+  },
+  AddPost: {
+    screen: AddPost,
+    navigationOptions: {
+      title: 'Adicionar post'
+    }
+  },
+  
 }, {
   initialRouteName: 'Feed'
 });

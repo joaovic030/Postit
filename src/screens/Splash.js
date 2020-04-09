@@ -22,7 +22,9 @@ export default class Splash extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image source={require('../../assets/imgs/Logo.png')} style={styles.image} />
+        <View style={styles.imageBox}>
+          <Image source={require('../../assets/imgs/Logo.png')} style={styles.image} />
+        </View>
         <View style={styles.footer}>
             <View style={styles.profile}>
                 <Image source={require('../../assets/imgs/smileJoao.jpg')} style={styles.photo} />
@@ -42,10 +44,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#283CA1'
   },
+  imageBox: {
+    height: 110,
+    width: 110,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 2
+  },
   image: {
-    height: 238,
-    width: 194,
+    width: 100,
+    height: 100,
     resizeMode: 'contain',
+    backgroundColor: '#283CA1'
   },
   header: {
     fontSize: 50,

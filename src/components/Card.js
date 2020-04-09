@@ -24,7 +24,7 @@ export default props => {
         <View style={styles.actions}>
         
         {editable ? <View style={{flexDirection: 'row' }}>
-                      <TouchableOpacity onPress={props.onSaveContent}><Icon name='check-circle' color='green' size={14} style={{ padding: 2 }} /></TouchableOpacity>
+                      <TouchableOpacity onPress={() => setEditable(!editable)}><Icon name='check-circle' color='green' size={14} style={{ padding: 2 }} /></TouchableOpacity>
                       <TouchableOpacity onPress={ () => setEditable(!editable)}><Icon name='times-circle' color='red' size={14} style={{ padding: 2 }} /></TouchableOpacity>
                     </View> :
                     <TouchableOpacity onPress={ () => setEditable(!editable)}><Icon name='edit' color={Pattern.colors.primary} size={14} style={{ padding: 2 }} /></TouchableOpacity>
@@ -66,6 +66,6 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-start'
   }
 })

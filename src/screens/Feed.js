@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { View, 
     Text, 
     StyleSheet,
@@ -11,19 +11,18 @@ import AsyncStorage from '@react-native-community/async-storage'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Pattern from '../styles/Pattern'
 import Header from '../components/Header'
-import Mock from '../../mock.json'
 import Card from '../components/Card'
 
 export default function Feed({ navigation }) {
    
-    const [user, setUser] = useState({email: '', nome: ''})
+    const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
 
     const retrieveUser = async () => {
         try {
             const res = await AsyncStorage.getItem('userData')
             const value = JSON.parse(res)
-            setUser({...value})
+            setUser(value)
         } catch(err) {
             console.log(err)
         }
@@ -39,16 +38,6 @@ export default function Feed({ navigation }) {
             console.log(err)
         }
         return
-    }
-
-    const getPosts = () => {
-        if(!posts[0]) {
-            const newData = Mock.posts
-            setPosts([...newData])
-            console.log(posts)
-            savePosts(newData)
-        }
-        retrievePosts()
     }
 
     const savePosts = newPosts => {
@@ -76,8 +65,12 @@ export default function Feed({ navigation }) {
     useEffect(() => {
         setTimeout(() => {
             retrievePosts()
-        }, 500)
+        }, 1000)
     }, [posts])
+
+    useEffect(() => {
+        retrievePosts()
+    }, [])
 
     useEffect(() => {
         savePosts(posts)
