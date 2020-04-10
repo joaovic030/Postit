@@ -144,6 +144,12 @@ android {
         }
     }
     signingConfigs {
+        release {
+            storeFile file('boticario.keystore')
+            storePassword 'boticario'
+            keyAlias 'boticariokey'
+            keyPassword 'boticario'
+        }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
