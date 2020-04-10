@@ -32,17 +32,17 @@ export default props => {
                       <TouchableOpacity onPress={() => {
                         props.onContentChange(props.id, contentValue)
                         setEditable(!editable)
-                      }}><Icon name='check-circle' color='green' size={14} style={{ padding: 2 }} /></TouchableOpacity>
+                      }}><Icon name='check-circle' color='green' size={18} style={{ padding: 2 }} /></TouchableOpacity>
                       <TouchableOpacity onPress={ () => {
                         setEditable(!editable)
                         setContentValue(props.content)
-                      } }><Icon name='times-circle' color='red' size={14} style={{ padding: 2 }} /></TouchableOpacity>
+                      } }><Icon name='times-circle' color='red' size={18} style={{ padding: 2 }} /></TouchableOpacity>
                     </View> :
-                    <TouchableOpacity onPress={ () => setEditable(!editable)}><Icon name='edit' color={Pattern.colors.primary} size={14} style={{ padding: 2 }} /></TouchableOpacity>
+                    <TouchableOpacity onPress={ () => setEditable(!editable)}><Icon name='edit' color={Pattern.colors.primary} size={18} style={{ padding: 2 }} /></TouchableOpacity>
         }
 
         <TouchableOpacity onPress={() => props.onDeletePost(props.id)}>
-          <Icon name='trash' color='#f00' size={14} style={{ padding: 2 }} />
+          <Icon name='trash' color='#f00' size={18} style={{ padding: 2 }} />
         </TouchableOpacity>
       </View> : null}
       

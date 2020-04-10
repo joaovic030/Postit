@@ -65,7 +65,6 @@ class Login extends Component {
     try {
         const res = await AsyncStorage.getItem('users')
         const value = JSON.parse(res)
-        // console.log("All users =>", value)
         return value
     } catch(err) {
         console.log(err)
@@ -75,15 +74,20 @@ class Login extends Component {
 
   subscribeUser = async () => {
     let allUsers = await this.retrieveUser()
-    
-    let verifyUser = allUsers.filter(user => user.email === this.state.email)
-    if(verifyUser.length > 0) {
-      Alert.alert("Erro!", "Usuário já possui cadastro!")
-      this.setState(this.state)
-    } else {
-      allUsers.push(this.state)
-      const saveUsers = AsyncStorage.setItem('users', JSON.stringify(allUsers))
-      this.props.navigation.navigate('Login')
+    try {
+        // let verifyUser = 
+        if(allUsers && allUsers.filter(user => user.email === this.state.email).length > 0) {
+          Alert.alert("Erro!", "Usuário já possui cadastro!")
+          this.setState(this.state)
+        } else {
+          allUsers = allUsers ? allUsers : []
+          allUsers.push(this.state)
+          const saveUsers = AsyncStorage.setItem('users', JSON.stringify(allUsers))
+          this.setState({ subscribe: !this.state.subscribe })
+        } 
+      
+    } catch (error) {
+      console.log(error)
     }
   }
   signup = () => {
@@ -101,7 +105,7 @@ class Login extends Component {
 }
   getPosts = async () => {
     const posts = await this.retrievePosts()
-    if(posts.length === 0)  {
+    if(!posts || posts.length === 0)  {
       const newPosts = Mock.posts
       const savePosts = AsyncStorage.setItem('posts', JSON.stringify(newPosts))
     }
